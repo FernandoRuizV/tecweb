@@ -122,5 +122,30 @@
     echo "El valor de b: $b <br>";
     echo "El valor de c: $c <br><br>";
     ?>
+        <h2>Ejercicio 6</h2>
+    <?php
+	$a = (1==1);       
+	$b = (5==6);       
+	$c = FALSE;        
+	$d = TRUE;   
+	$e = ($d AND $d);  
+	$f = ($c OR $c);  
+
+	var_dump($a);
+    echo "<br>";
+    var_dump($b);
+    echo "<br>";
+    var_dump($c);
+    echo "<br>";
+    var_dump($d);
+    echo "<br>";
+    var_dump($e);
+    echo "<br>";
+    var_dump($f);
+    echo "<br><br>";
+
+    ?>
+
+
 </body>
 </html>
