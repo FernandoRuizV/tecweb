@@ -53,5 +53,31 @@
     el valor de b cambia a ser el valor referenciado de a, por lo que todas pasan a tener
     el mismo valor.</p>';
     ?>
+
+        <h2>Ejercicio 3</h2>
+    <?php
+
+    $a = "PHP5";
+    print_r($a);
+    echo "<br>";
+    $z[] = &$a;
+    print_r($z);
+    echo "<br>";
+    $b = "5a version de PHP";
+    print_r($b);
+    echo "<br>";
+    @$c = $b*10;
+    echo "$c";
+    echo "<br>";
+    $a .= $b;
+    print_r($a);
+    echo "<br>";
+    $b *= $c;
+    print_r($b);
+    echo "<br>";
+    $z[0] = "MySQL";
+    print_r($z);
+    echo "<br><br>";
+    ?>
 </body>
 </html>
