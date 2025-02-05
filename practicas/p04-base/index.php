@@ -124,16 +124,17 @@
     ?>
         <h2>Ejercicio 6</h2>
     <?php
-	$a = (1==1);       
-	$b = (5==6);       
-	$c = FALSE;        
-	$d = TRUE;   
-	$e = ($d AND $d);  
-	$f = ($c OR $c);  
 
-	var_dump($a);
+	$a = "0";
+    $b = "TRUE";
+    $c = FALSE;
+    $d = ($a OR $b);
+    $e = ($a AND $c);
+    $f = ($a XOR $b);
+
+	var_dump((bool)$a);
     echo "<br>";
-    var_dump($b);
+    var_dump((bool)$b);
     echo "<br>";
     var_dump($c);
     echo "<br>";
@@ -143,6 +144,9 @@
     echo "<br>";
     var_dump($f);
     echo "<br><br>";
+
+    echo "<br>\$c = " . var_export($c, true) . "<br>";
+	echo "\$e = " . var_export($e, true) . "<br>";
 
     ?>
 
