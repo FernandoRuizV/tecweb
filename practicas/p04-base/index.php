@@ -82,35 +82,45 @@
         <h2>Ejercicio 4</h2>   
     <?php
 
+    unset($a, $b, $c, $z);
     $a = "PHP5";
-    print_r($GLOBALS['a']);
-    echo "<br>";
+    $z[] = &$a;
+    $b = "5a version de PHP";
+    @$c = $b*10;
+    $a .= $b;
+    @$b *= $c;
+    $z[0] = "MySQL";
     
-    $GLOBALS['z'][] = &$GLOBALS['a'];
-    print_r($GLOBALS['z']);
-    echo "<br>";
-    
-    $GLOBALS['b'] = "5a version de PHP";
-    print_r($GLOBALS['b']);
-    echo "<br>";
-    
-    @$GLOBALS['c'] = $GLOBALS['b'] * 10;
-    echo $GLOBALS['c'] . "<br>";
-    
-    $GLOBALS['a'] .= $GLOBALS['b'];
-    print_r($GLOBALS['a']);
-    echo "<br>";
-    
-    $GLOBALS['b'] *= $GLOBALS['c'];
-    print_r($GLOBALS['b']);
-    echo "<br>";
-    
-    $GLOBALS['z'][0] = "MySQL";
-    print_r($GLOBALS['z']);
-    echo "<br>";
-    
-    print_r($GLOBALS['a']); 
-    echo "<br><br>";    
+    echo "\$a = ";
+    var_dump($GLOBALS['a']);
+	echo "<br><br>";
+
+	echo "\$z = ";
+	var_dump($GLOBALS['z']);
+	echo "<br><br>";
+
+	echo "\$b = ";
+	var_dump($GLOBALS['b']);
+	echo "<br><br>";
+
+	echo "\$c = ";
+	var_dump($GLOBALS['c']);
+	echo "<br><br>";
+
+    ?>
+        <h2>Ejercicio 5</h2>
+    <?php
+
+    unset($a, $b, $c);
+
+    $a = "7 personas";
+    $b = (integer) $a;
+    $a = "9E3";
+    $c = (double) $a;
+
+    echo "El valor de a: $a <br>";
+    echo "El valor de b: $b <br>";
+    echo "El valor de c: $c <br><br>";
     ?>
 </body>
 </html>
