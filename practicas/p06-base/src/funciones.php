@@ -27,4 +27,33 @@ function funcion2()
 
 }
 
+function funcion3($num)
+{
+    $a=-1;
+    while(($a%$num !=0))
+    {
+        $a=mt_rand(1,100);
+    }
+    echo "<br>";
+    echo "El numero entero encontrado es ".$a." y es multiplo de ".$num;
+}
+
+function funcion5($edad, $sexo)
+{
+    if($sexo == "femenino")
+    {
+        if($edad>=18 && $edad<=35)
+        {
+            echo "Bienvenida, usted está en el rango de edad permitido."."<br>";
+        }
+        else{
+            echo "Su edad no se encuentra dentro del rango aceptado"."<br>";
+        }
+    }
+    if($sexo!= "femenino")
+    {
+        echo "Necesita ser una persona del sexo femenino para ser aceptada"."<br>";
+    }
+}
+
 ?>

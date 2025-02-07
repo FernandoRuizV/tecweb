@@ -21,6 +21,30 @@
     require_once __DIR__.'/src/funciones.php';
     funcion2();
     ?>
+
+    <h2>Ejercicio 3</h2>
+    <p>Encontrar el primer número entero obtenido aleatoriamente y que además sea múltiplo de un número dado.</p>
+    <?php
+    require_once __DIR__.'/src/funciones.php';
+    if(isset($_GET['num']))
+    {
+        funcion3($_GET['num']) ;
+    }
+    ?>
+    <h2>Ejercicio 5</h2>
+    <form action="http://localhost/tecweb/practicas/p06-base/" method="post">
+        Edad: <input type="text" name="edad"><br>
+        Sexo: <input type="text" name="sexo"><br>
+        <input type="submit">
+    </form>
+    <br>
+    <?php
+        if(isset($_POST["edad"]) && isset($_POST["sexo"]))
+        {
+            funcion5($_POST["edad"],$_POST["sexo"]);
+        }
+    ?>
+
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p04/index.php" method="post">
         Name: <input type="text" name="name"><br>
