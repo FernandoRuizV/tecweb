@@ -44,6 +44,19 @@
             funcion5($_POST["edad"],$_POST["sexo"]);
         }
     ?>
+    <h2>Ejercicio 6</h2>
+    <form action="http://localhost/tecweb/practicas/p06-base/" method="post">
+        Buscar por matricula: <input type="text" name="matricula"><br>
+        ¿Quiere mostrar todos?: <input type="text" name="todos"><br>
+        <input type="submit">
+    </form>
+    <br>
+    <?php
+        if(isset($_POST["matricula"]) || isset($_POST["todos"]))
+        {
+            funcion6($_POST["matricula"],$_POST["todos"]);
+        }
+    ?>
 
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p04/index.php" method="post">
