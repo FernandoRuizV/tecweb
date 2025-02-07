@@ -15,7 +15,12 @@
             funcion1($_GET['numero']) ;
         }
     ?>
-
+    <h2>Ejercicio 2</h2>
+    <p>Crea un programa para la generación repetitiva de 3 números aleatorios</p>
+    <?php
+    require_once __DIR__.'/src/funciones.php';
+    funcion2();
+    ?>
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p04/index.php" method="post">
         Name: <input type="text" name="name"><br>
