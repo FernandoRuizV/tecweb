@@ -31,6 +31,12 @@
         funcion3($_GET['num']) ;
     }
     ?>
+    <h2>Ejercicio 4</h2>
+    <p>Crear arreglos con indices del codigo ASCI</p>
+    <?php
+    require_once __DIR__.'/src/funciones.php';
+        funcion4() ;
+    ?>
     <h2>Ejercicio 5</h2>
     <form action="http://localhost/tecweb/practicas/p06-base/" method="post">
         Edad: <input type="text" name="edad"><br>
@@ -47,7 +53,7 @@
     <h2>Ejercicio 6</h2>
     <form action="http://localhost/tecweb/practicas/p06-base/" method="post">
         Buscar por matricula: <input type="text" name="matricula"><br>
-        ¿Quiere mostrar todos?: <input type="text" name="todos"><br>
+        ¿Quiere mostrar todos?: si/no <input type="text" name="todos"><br>
         <input type="submit">
     </form>
     <br>

@@ -30,23 +30,35 @@ function funcion2()
 function funcion3($num)
 {
     $a=-1;
-    while(($a%$num !=0))
+    /*while(($a%$num !=0))
     {
         $a=mt_rand(1,100);
-    }
+    }*/
+    do{
+        $a=mt_rand(1,100);
+
+    }while(($a%$num !=0));
     echo "<br>";
-    echo "El numero entero encontrado es ".$a." y es multiplo de ".$num;
+    echo "El número entero encontrado es ".$a." y es múltiplo de ".$num;
 }
-/*function funcion4()
+function funcion4()
 {
-    for($i=0; $i<122; $i++)
+    $arr= [];
+    for($i=97; $i<123; $i++)
     {
-        if($i>=97)
-        {
-            $arr[$i]=
-        }
+        $arr[$i]= chr($i);
+        
     }
-}*/
+    echo "<table border='1'>";
+    echo "<tr><th>Código ASCII</th><th>Carácter</th></tr>";
+    foreach ($arr as $key => $value) {
+        echo "<tr>";
+        echo "<td>$key</td>";
+        echo "<td>$value</td>";
+        echo "</tr>";
+    }echo "</table>";
+    
+}
 function funcion5($edad, $sexo)
 {
     if($sexo == "femenino")
