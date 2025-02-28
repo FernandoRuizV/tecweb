@@ -13,7 +13,7 @@
 <body>
     <h1>Datos de la tabla "productos"</h1>
 
-    <form id="miFormulario" action="http://localhost/tecweb/practicas/p08-base/set_producto_v3.php" method="post">
+    <form id="miFormulario" action="http://localhost/tecweb/practicas/p09-base/update_producto.php" method="post">
         <fieldset>
             <legend>Actualiza los datos de los productos:</legend>
             <ul>
