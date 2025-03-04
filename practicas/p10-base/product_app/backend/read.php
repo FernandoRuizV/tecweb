@@ -13,22 +13,7 @@
         $detalles = isset($_POST['detalles']) ? "%" . $conexion->real_escape_string($_POST['detalles']) . "%" : '';
 
         // Construcción de la consulta de búsqueda
-        $query = "SELECT * FROM productos WHERE 1=1";  // 1=1 es una forma de asegurar que siempre haya una condición
-
-        // Agregar filtros según los parámetros recibidos
-        if (!empty($id)) {
-            $query .= " AND id='$id'";
-        }
-        if (!empty($nombre)) {
-            $query .= " AND nombre LIKE '$nombre'";
-        }
-        if (!empty($marca)) {
-            $query .= " AND marca LIKE '$marca'";
-        }
-        if (!empty($detalles)) {
-            $query .= " AND detalles LIKE '$detalles'";
-        }
-
+        $query = "SELECT * FROM productos WHERE id='$id' or nombre LIKE '$nombre' or marca LIKE '$marca' or detalles LIKE '$detalles'";
         // Ejecutar la consulta
         if ($result = $conexion->query($query)) {
             // Verificamos si hay resultados
