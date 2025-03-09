@@ -123,9 +123,22 @@ $(document).ready(function(){
         }
 
         alert("Formulario validado correctamente. Enviando...");
-
-
-        const postData={
+        let postData;
+        if(edit==false)
+        {
+            postData={
+                nombre: desc.nombre,
+                precio: desc.precio,
+                unidades: desc.unidades,
+                modelo: desc.modelo,
+                marca: desc.marca,
+                detalles: desc.detalles,
+                imagen: desc.imagen,
+                
+            }
+            postData=JSON.stringify(postData)
+        }else{
+           postData={
             nombre: desc.nombre,
             precio: desc.precio,
             unidades: desc.unidades,
@@ -134,26 +147,29 @@ $(document).ready(function(){
             detalles: desc.detalles,
             imagen: desc.imagen,
             id: $('#productId').val()
-        };
+        }; 
+        }
+        
         
         console.log("Datos a enviar:", postData);
         let url= edit==false ? 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/product-add.php': 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/producto_edit.php';
         $.post(url,postData,function(response) {
 
             console.log("Respuesta del servidor:", response);
-
             try {
                 let res = JSON.parse(response);
                 if (res.status === "success") {
-                    alert(res.message);  // Mostrar mensaje de éxito
+                    alert(res.message);
                     init();
                     $('#name').val('');
+                    edit = false;
                     listar();
                 } else {
                     alert(res.message);  // Mostrar mensaje de error
                 }
             } catch (e) {
                 console.error("Error al procesar la respuesta JSON:", e);
+                console.log("Respuesta no JSON:", response);
                 alert("Hubo un error al procesar la respuesta del servidor.");
             }
         }); 
