@@ -175,34 +175,40 @@ $(document).ready(function(){
         
         if (errores) return;
         
-
         
-        let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
+        
+            let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
+        
+        console.log("Datos enviados:", postData);
                 const url = edit === false ? 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/producto_edit.php';
                 if (edit) {
                     postData.id = id;
                 }
-        
                 $.post(url, postData, (response) => {
-                    let respuesta = JSON.parse(response);
-                    let template_bar = `
-                        <li style="list-style: none;">Status: ${respuesta.status}</li>
-                        <li style="list-style: none;">Message: ${respuesta.message}</li>
-                    `;
-        
-                    $("#container").html(template_bar).show();
-                    $("#name").val('');
-                    $("#precio").val('');
-                    $("#marca").val('');
-                    $("#unidades").val('');
-                    $("#modelo").val('');
-                    $("#detalles").val('');
-                    $("#imagen").val('');
-                    if (!edit) {
-                        $("#product-form")[0].reset();
+                    console.log("Respuesta del servidor:", response);
+ 
+                    try {
+                        let res = JSON.parse(response);
+                        if (res.status === "success") {
+                            $("#container").html(response).show();
+                            $("#name").val('');
+                            $("#precio").val('');
+                            $("#marca").val('');
+                            $("#unidades").val('');
+                            $("#modelo").val('');
+                            $("#detalles").val('');
+                            $("#imagen").val('');
+                            edit = false;
+                            listar();
+                        } else {
+                            $("#container").html(response).show();
+                        }
+                    } catch (e) {
+                        console.error("Error al procesar la respuesta JSON:", e);
+                        console.log("Respuesta no JSON:", response);
+                        alert("Hubo un error al procesar la respuesta del servidor.");
                     }
-                    listar();
-                    edit = false;
+                    
                 });
             });
             $("#name, #modelo, #marca, #precio, #detalles, #unidades").blur(function() {
