@@ -13,8 +13,6 @@ function init() {
      * Convierte el JSON a string para poder mostrarlo
      * ver: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/JSON
      */
-    var JsonString = JSON.stringify(baseJSON,null,2);
-    document.getElementById("description").value = JsonString;
 
     // SE LISTAN TODOS LOS PRODUCTOS
     //*listarProductos();*/
@@ -74,107 +72,145 @@ $(document).ready(function(){
             $('#product-result').hide();
         }
         
+       
         
     });
-    $('#product-form').submit(function(e){
-        let description = $('#description').val().trim();
-        let desc= JSON.parse(description);
-        desc['nombre']=$('#name').val().trim();
+    $('#name').keyup(function() {
+        if($('#name').val()) {
+            let name = $('#name').val();
+            $.ajax({
+                url: './backend/product-search-name.php?name='+$('#name').val(),
+                data: {name},
+                type: 'GET',
+                success: function (response) {
+                    if(!response.error) {
+                        // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
+                        const productos = JSON.parse(response);
+                        
+                        // SE VERIFICA SI EL OBJETO JSON TIENE DATOS
+                        if(Object.keys(productos).length > 0) {
+                            console.log(productos);
+                            let template_bar = '';
+                            productos.forEach(producto => {
 
-        // Validaciones
-        if (!desc.nombre) {
-            alert("El nombre es requerido.");
-            return;
-        }
-        if (desc.nombre.length > 100) {
-            alert("El nombre debe tener 100 caracteres o menos.");
-            return;
-        }
-        if (!desc.marca || desc.marca=="NA") {
-            alert("La marca es requerida.");
-            return;
-        }
-        if (!desc.modelo.match(/^[A-Za-z0-9]+$/)) {
-            alert("El modelo debe ser alfanumérico.");
-            return;
-        }
-        if (desc.modelo.length > 25) {
-            alert("El modelo debe tener 25 caracteres o menos.");
-            return;
-        }
-        if (isNaN(desc.precio) || desc.precio <= 99.99) {
-            alert("El precio debe ser un número mayor a 99.99.");
-            return;
-        }
-        if (desc.detalles == "NA") {
-            alert("Los detalles no pueden ser nulos");
-            return;
-        }
-        if (desc.detalles.length > 250) {
-            alert("Los detalles no pueden exceder los 250 caracteres.");
-            return;
-        }
-        if (isNaN(desc.unidades) || desc.unidades < 0) {
-            alert("Las unidades deben ser un número igual o mayor a 0.");
-            return;
-        }
-        if (!desc.imagen) {
-            desc.imagen = "/tecweb/practicas/p08-base/img/imagen.png";
-        }
-
-        alert("Formulario validado correctamente. Enviando...");
-        let postData;
-        if(edit==false)
-        {
-            postData={
-                nombre: desc.nombre,
-                precio: desc.precio,
-                unidades: desc.unidades,
-                modelo: desc.modelo,
-                marca: desc.marca,
-                detalles: desc.detalles,
-                imagen: desc.imagen,
-                
-            }
-            postData=JSON.stringify(postData)
-        }else{
-           postData={
-            nombre: desc.nombre,
-            precio: desc.precio,
-            unidades: desc.unidades,
-            modelo: desc.modelo,
-            marca: desc.marca,
-            detalles: desc.detalles,
-            imagen: desc.imagen,
-            id: $('#productId').val()
-        }; 
-        }
-        
-        
-        console.log("Datos a enviar:", postData);
-        let url= edit==false ? 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/product-add.php': 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/producto_edit.php';
-        $.post(url,postData,function(response) {
-
-            console.log("Respuesta del servidor:", response);
-            try {
-                let res = JSON.parse(response);
-                if (res.status === "success") {
-                    alert(res.message);
-                    init();
-                    $('#name').val('');
-                    edit = false;
-                    listar();
-                } else {
-                    alert(res.message);  // Mostrar mensaje de error
+                                template_bar += `
+                                    <li>${producto.nombre}</li>
+                                `;
+                                  
+                            }); 
+                            $('#container').html('');
+                            $('#container').append("Producto con nombres similares");
+                            $('#container').append(template_bar); 
+                            $('#product-result').removeClass('d-none').show();                            
+                        }else{
+                            $('#container').html('');
+                            $('#container').append("Producto con nombre válido");
+                            $('#product-result').removeClass('d-none').show();
+                        }
+                    }
                 }
-            } catch (e) {
-                console.error("Error al procesar la respuesta JSON:", e);
-                console.log("Respuesta no JSON:", response);
-                alert("Hubo un error al procesar la respuesta del servidor.");
-            }
-        }); 
+            });
+        }
+        else {
+            $('#product-result').hide();
+        }
+    }); 
+    $('#product-form').submit(function(e){
         e.preventDefault();
-    })
+        $('button.btn-primary').text("Agregar Producto");
+        let errores = false;
+        $("#product-result").html("").removeClass('d-none').show();
+        let nombre = $("#name").val().trim();
+        let precio = $("#precio").val().trim();
+        let marca = $("#marca").val().trim();
+        let unidades = $("#unidades").val().trim();
+        let modelo = $("#modelo").val().trim();
+        let detalles = $("#detalles").val().trim();
+        let imagen = $("#imagen").val().trim();
+        let id = $("#productId").val().trim(); 
+        
+        // VALIDACIONES
+        if (!nombre) {
+            $("#product-result").append(`<p>El nombre es requerido.</p>`);
+            errores = true;
+        } else if (nombre.length > 100) {
+            $("#product-result").append(`<p>El nombre debe tener 100 caracteres o menos.</p>`);
+                errores = true;
+        }
+        
+        if (!modelo.match(/^[A-Za-z0-9]+$/)) {
+            $("#product-result").append(`<p>El modelo debe ser alfanumérico.</p>`);
+            errores = true;
+    
+        } else if (modelo.length > 25) {
+            $("#product-result").append(`<p>El modelo debe tener 25 caracteres o menos.</p>`);
+            errores = true;
+        }
+        
+        if (!marca || marca === "NA") {
+            $("#product-result").append(`<p>La marca es requerida.</p>`);
+            errores = true;
+        }
+        
+        if (isNaN(precio) || precio <= 99.99) {
+            $("#product-result").append(`<p>El precio debe ser un número mayor a 99.99.</p>`);
+            errores = true;
+        }
+        
+        if (detalles === "NA") {
+            $("#product-result").append(`<p>Los detalles no pueden ser nulos.</p>`);
+            errores = true;
+        } else if (detalles.length > 250) {
+            $("#product-result").append(`<p>Los detalles no pueden exceder los 250 caracteres.</p>`);
+            errores = true;
+        }
+        
+        if (isNaN(unidades) || unidades < 0) {
+            $("#product-result").append(`<p>Las unidades deben ser un número igual o mayor a 0.</p>`);
+            errores = true;
+        }
+        if (!imagen) {
+            imagen = "/tecweb/practicas/p08-base/img/imagen.png"; 
+        }
+        
+        if (errores) return;
+        
+
+        
+        let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
+                const url = edit === false ? 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/producto_edit.php';
+                if (edit) {
+                    postData.id = id;
+                }
+        
+                $.post(url, postData, (response) => {
+                    let respuesta = JSON.parse(response);
+                    let template_bar = `
+                        <li style="list-style: none;">Status: ${respuesta.status}</li>
+                        <li style="list-style: none;">Message: ${respuesta.message}</li>
+                    `;
+        
+                    $("#container").html(template_bar).show();
+                    $("#name").val('');
+                    $("#precio").val('');
+                    $("#marca").val('');
+                    $("#unidades").val('');
+                    $("#modelo").val('');
+                    $("#detalles").val('');
+                    $("#imagen").val('');
+                    if (!edit) {
+                        $("#product-form")[0].reset();
+                    }
+                    listar();
+                    edit = false;
+                });
+            });
+            $("#name, #modelo, #marca, #precio, #detalles, #unidades").blur(function() {
+                if (!edit) {
+                    $("#product-result").html(""); 
+                    $("#product-form").submit(); 
+                }
+        });
     
     function listar(){
         $.ajax({
@@ -238,30 +274,27 @@ $(document).ready(function(){
 
     $(document).on('click', '.editar', function() {
         if (confirm('¿Estás seguro de querer editar el elemento?')) {
+            $('button.btn-primary').text("Modificar Producto");
             let fila = $(this).closest('tr');
             let id = fila.find('td').first().text();
             edit=true;
             $.post('http://localhost/tecweb/practicas/p11_con_jquery/p11_sin_jquery/product_app/backend/update_producto.php', {id: id}, function(response) {
                 console.log("Respuesta del servidor:", response);
-                
+
                 try {
                     let prod = JSON.parse(response);
-                    
+
                     if (prod.status === "success" && prod.data.length > 0) {
-                        
+
                         let product = prod.data[0];
                         $('#name').val(product.nombre);
                         $('#productId').val(product.id);
-                        let baseJSON = {
-                            "precio": product.precio,
-                            "unidades": product.unidades,
-                            "modelo": product.modelo,
-                            "marca": product.marca,
-                            "detalles": product.detalles,
-                            "imagen": product.imagen
-                        };
-                        
-                        $('#description').val(JSON.stringify(baseJSON, null, 2));
+                        $('#precio').val(product.precio);
+                        $('#unidades').val(product.unidades);
+                        $('#modelo').val(product.modelo);
+                        $('#marca').val(product.marca);
+                        $('#detalles').val(product.detalles);
+                        $('#imagen').val(product.imagen);
                     } else {
                         alert("Producto no encontrado o respuesta incorrecta.");
                     }
@@ -269,11 +302,10 @@ $(document).ready(function(){
                     console.error("Error al procesar la respuesta JSON:", e);
                     alert("Hubo un error al procesar los datos.");
                 }
-            
+
             });
         }
     });
-    
 
 
 });

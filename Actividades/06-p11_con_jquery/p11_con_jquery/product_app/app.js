@@ -159,7 +159,7 @@ $(document).ready(function(){
         e.preventDefault();
         $('button.btn-primary').text("Agregar Producto");
 
-        $("#product-result").show().html("");
+        $("#container").show().html("");
         let errores = false;
     
         let nombre = $("#name").val().trim();
@@ -246,7 +246,7 @@ $(document).ready(function(){
                     edit = false;
                 });
             });
-            $("#name, #modelo, #marca, #precio, #detalles, #unidades, #detalles, #imagen").blur(function() {
+            $("#name, #modelo, #marca, #precio, #detalles, #unidades").blur(function() {
                 if (!edit) {
                     $("#product-result").html(""); 
                     $("#product-form").submit(); 
