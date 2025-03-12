@@ -57,7 +57,44 @@ $(document).ready(function(){
             }
         });
     }
+        $('#name').keyup(function() {
+        if($('#name').val()) {
+            $("#product-result").show().html("");
+            let name = $('#name').val();
+            $.ajax({
+                url: './backend/product-search-name.php?name='+$('#name').val(),
+                data: {name},
+                type: 'GET',
+                success: function (response) {
+                    if(!response.error) {
+                        // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
+                        const productos = JSON.parse(response);
+                        
+                        // SE VERIFICA SI EL OBJETO JSON TIENE DATOS
+                        if(Object.keys(productos).length > 0) {
+                            console.log(productos);
+                            let template_bar = '';
+                            productos.forEach(producto => {
 
+                                template_bar += `
+                                    <li>${producto.nombre}</li>
+                                `;
+                                  
+                            }); 
+                            $('#product-result').show();
+                            $('#product-result').append("Producto con nombres similares");
+                            $('#product-result').append(template_bar);                             
+                        }else{
+                            $('#product-result').append("Producto con nombre válido");
+                        }
+                    }
+                }
+            });
+        }
+        else {
+            $('#product-result').hide();
+        }
+    }); 
     $('#search').keyup(function() {
         if($('#search').val()) {
             let search = $('#search').val();
@@ -116,108 +153,107 @@ $(document).ready(function(){
         else {
             $('#product-result').hide();
         }
-    });
+    }); 
 
-
-    $("#product-form").submit(function(e) {
+   $("#product-form").submit(function(e) {
         e.preventDefault();
+        $('button.btn-primary').text("Agregar Producto");
 
-            $('button.btn-primary').text("Agregar Producto");
-            $("#product-result").show().html("");
-            let errores = false;
-
-            let nombre = $("#name").val().trim();
-            let precio = $("#precio").val().trim();
-            let marca = $("#marca").val().trim();
-            let unidades = $("#unidades").val().trim();
-            let modelo = $("#modelo").val().trim();
-            let detalles = $("#detalles").val().trim();
-            let imagen = $("#imagen").val().trim();
-            let id = $("#productId").val().trim(); 
+        $("#product-result").show().html("");
+        let errores = false;
     
-
-            // VALIDACIONES
-            if (!nombre) {
-                $("#product-result").append(`<p>El nombre es requerido.</p>`);
+        let nombre = $("#name").val().trim();
+        let precio = $("#precio").val().trim();
+        let marca = $("#marca").val().trim();
+        let unidades = $("#unidades").val().trim();
+        let modelo = $("#modelo").val().trim();
+        let detalles = $("#detalles").val().trim();
+        let imagen = $("#imagen").val().trim();
+        let id = $("#productId").val().trim(); 
+        
+    
+        // VALIDACIONES
+        if (!nombre) {
+            $("#product-result").append(`<p>El nombre es requerido.</p>`);
+            errores = true;
+        } else if (nombre.length > 100) {
+            $("#product-result").append(`<p>El nombre debe tener 100 caracteres o menos.</p>`);
                 errores = true;
-            } else if (nombre.length > 100) {
-                $("#product-result").append(`<p>El nombre debe tener 100 caracteres o menos.</p>`);
-                errores = true;
-            }
+        }
+        
+        if (!modelo.match(/^[A-Za-z0-9]+$/)) {
+            $("#product-result").append(`<p>El modelo debe ser alfanumérico.</p>`);
+            errores = true;
     
-            if (!modelo.match(/^[A-Za-z0-9]+$/)) {
-                $("#product-result").append(`<p>El modelo debe ser alfanumérico.</p>`);
-                errores = true;
-
-            } else if (modelo.length > 25) {
-                $("#product-result").append(`<p>El modelo debe tener 25 caracteres o menos.</p>`);
-                errores = true;
-            }
+        } else if (modelo.length > 25) {
+            $("#product-result").append(`<p>El modelo debe tener 25 caracteres o menos.</p>`);
+            errores = true;
+        }
+        
+        if (!marca || marca === "NA") {
+            $("#product-result").append(`<p>La marca es requerida.</p>`);
+            errores = true;
+        }
+        
+        if (isNaN(precio) || precio <= 99.99) {
+            $("#product-result").append(`<p>El precio debe ser un número mayor a 99.99.</p>`);
+            errores = true;
+        }
+        
+        if (detalles === "NA") {
+            $("#product-result").append(`<p>Los detalles no pueden ser nulos.</p>`);
+            errores = true;
+        } else if (detalles.length > 250) {
+            $("#product-result").append(`<p>Los detalles no pueden exceder los 250 caracteres.</p>`);
+            errores = true;
+        }
+        
+        if (isNaN(unidades) || unidades < 0) {
+            $("#product-result").append(`<p>Las unidades deben ser un número igual o mayor a 0.</p>`);
+            errores = true;
+        }
+        if (!imagen) {
+            imagen = "/tecweb/practicas/p08-base/img/imagen.png"; 
+        }
+        
+        if (errores) return;
     
-            if (!marca || marca === "NA") {
-                $("#product-result").append(`<p>La marca es requerida.</p>`);
-                errores = true;
-            }
-    
-            if (isNaN(precio) || precio <= 99.99) {
-                $("#product-result").append(`<p>El precio debe ser un número mayor a 99.99.</p>`);
-                errores = true;
-            }
-    
-            if (detalles === "NA") {
-                $("#product-result").append(`<p>Los detalles no pueden ser nulos.</p>`);
-                errores = true;
-            } else if (detalles.length > 250) {
-                $("#product-result").append(`<p>Los detalles no pueden exceder los 250 caracteres.</p>`);
-                errores = true;
-            }
-    
-            if (isNaN(unidades) || unidades < 0) {
-                $("#product-result").append(`<p>Las unidades deben ser un número igual o mayor a 0.</p>`);
-                errores = true;
-                
-            }
-    
-            if (!imagen) {
-                imagen = "/tecweb/practicas/p08-base/img/imagen.png"; 
-            }
-    
-            if (errores) return;
-
-            let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
-            const url = edit === false ? './backend/product-add.php' : './backend/product-edit.php';
-            if (edit) {
-                postData.id = id;
-            }
-    
-            $.post(url, postData, (response) => {
-                let respuesta = JSON.parse(response);
-                let template_bar = `
-                    <li style="list-style: none;">Status: ${respuesta.status}</li>
-                    <li style="list-style: none;">Message: ${respuesta.message}</li>
-                `;
-    
-                $("#product-result").html(template_bar).show();
-                $("#name").val('');
-                $("#precio").val('');
-                $("#marca").val('');
-                $("#unidades").val('');
-                $("#modelo").val('');
-                $("#detalles").val('');
-                $("#imagen").val('');
-                if (!edit) {
-                    $("#product-form")[0].reset();
+                let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
+                const url = edit === false ? './backend/product-add.php' : './backend/product-edit.php';
+                if (edit) {
+                    postData.id = id;
                 }
-                listarProductos();
-                edit = false;
+        
+                $.post(url, postData, (response) => {
+                    let respuesta = JSON.parse(response);
+                    let template_bar = `
+                        <li style="list-style: none;">Status: ${respuesta.status}</li>
+                        <li style="list-style: none;">Message: ${respuesta.message}</li>
+                    `;
+        
+                    $("#product-result").html(template_bar).show();
+                    $("#name").val('');
+                    $("#precio").val('');
+                    $("#marca").val('');
+                    $("#unidades").val('');
+                    $("#modelo").val('');
+                    $("#detalles").val('');
+                    $("#imagen").val('');
+                    if (!edit) {
+                        $("#product-form")[0].reset();
+                    }
+                    listarProductos();
+                    edit = false;
+                });
             });
+            $("#name, #modelo, #marca, #precio, #detalles, #unidades, #detalles, #imagen").blur(function() {
+                if (!edit) {
+                    $("#product-result").html(""); 
+                    $("#product-form").submit(); 
+                }
         });
-        $("#name, #modelo, #marca, #precio, #detalles, #unidades").blur(function() {
-            if (!edit) {
-                $("#product-result").html(""); 
-                $("#product-form").submit(); 
-            }
-    });
+
+    
 
     $(document).on('click', '.product-delete', (e) => {
         if(confirm('¿Realmente deseas eliminar el producto?')) {
