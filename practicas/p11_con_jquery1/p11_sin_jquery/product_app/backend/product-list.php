@@ -1,5 +1,5 @@
 <?php
-    include_once __DIR__.'/database.php';
+    /*include_once __DIR__.'/database.php';
 
     // SE CREA EL ARREGLO QUE SE VA A DEVOLVER EN FORMA DE JSON
     $data = array();
@@ -24,5 +24,11 @@
     $conexion->close();
     
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
-    echo json_encode($data, JSON_PRETTY_PRINT);
+    echo json_encode($data, JSON_PRETTY_PRINT);*/
+    
+require_once __DIR__ . '/Products.php';
+    $db="marketzone";
+    $prod= new Products($db);
+    $prod->list();
+    $prod->getData();
 ?>

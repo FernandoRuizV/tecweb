@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__.'/database.php';
+/*include_once __DIR__.'/database.php';
 
 // Verifica si los datos están presentes
 if (isset($_POST['id'], $_POST['nombre'], $_POST['marca'], $_POST['modelo'], $_POST['precio'], $_POST['detalles'], $_POST['unidades'], $_POST['imagen'])) {
@@ -43,5 +43,9 @@ if (isset($_POST['id'], $_POST['nombre'], $_POST['marca'], $_POST['modelo'], $_P
 $conexion->close();
 
 // Convertir el array a JSON y devolver la respuesta
-echo json_encode($data, JSON_PRETTY_PRINT);
+echo json_encode($data, JSON_PRETTY_PRINT);*/
+require_once __DIR__ . '/Products.php';
+    $prod= new Products($db="marketzone");
+    $prod->edit($_POST);
+    $prod->getData();
 ?>

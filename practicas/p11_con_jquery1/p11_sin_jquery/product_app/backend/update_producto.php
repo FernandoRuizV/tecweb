@@ -1,5 +1,5 @@
 <?php
-    include_once __DIR__.'/database.php';
+    /*include_once __DIR__.'/database.php';
 
     // SE INICIALIZA EL ARREGLO JSON PARA DEVOLVER UNA RESPUESTA VACÍA O ERROR
     $json = array(
@@ -44,5 +44,9 @@
     }
 
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
-    echo json_encode($json, JSON_PRETTY_PRINT);
+    echo json_encode($json, JSON_PRETTY_PRINT);*/
+    require_once __DIR__ . '/Products.php';
+    $prod= new Products($db="marketzone");
+    $prod->asignar($_POST);
+    $prod->getData();
 ?>

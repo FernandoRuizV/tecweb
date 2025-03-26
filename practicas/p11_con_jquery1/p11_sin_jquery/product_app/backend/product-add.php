@@ -1,5 +1,5 @@
 <?php
-    include_once __DIR__.'/database.php';
+    /*include_once __DIR__.'/database.php';
 
     // SE OBTIENE LA INFORMACIÓN DEL PRODUCTO ENVIADA POR EL CLIENTE
     $data = array(
@@ -30,5 +30,14 @@
     }
 
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
-    echo json_encode($data, JSON_PRETTY_PRINT);
+    echo json_encode($data, JSON_PRETTY_PRINT);*/
+    require_once __DIR__ . '/Products.php';
+    if (isset($_POST['postData'])) {
+        // Convertir los datos POST a un objeto PHP
+        $Producto = (object)$_POST['postData'];
+        $prodObj->add($Producto);
+        echo $prodObj->getData();  // Devolver la respuesta
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Datos no válidos']);
+    }
 ?>
