@@ -80,8 +80,8 @@ $(document).ready(function(){
         if($('#name').val()) {
             let name = $('#name').val();
             $.ajax({
-                url: './backend/product-search-name.php?name='+$('#name').val(),
-                data: {name},
+                url: './backend/product-search-name.php',
+                data: { name: $('#name').val() },
                 type: 'GET',
                 success: function (response) {
                     if(!response.error) {
@@ -179,7 +179,7 @@ $(document).ready(function(){
         
         
             let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
-        
+            
         console.log("Datos enviados:", postData);
                 const url = edit === false ? 'http://localhost/tecweb/practicas/p11_con_jquery1/p11_sin_jquery/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/p11_con_jquery1/p11_sin_jquery/product_app/backend/producto_edit.php';
                 if (edit) {

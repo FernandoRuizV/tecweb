@@ -44,8 +44,11 @@ $conexion->close();
 
 // Convertir el array a JSON y devolver la respuesta
 echo json_encode($data, JSON_PRETTY_PRINT);*/
-require_once __DIR__ . '/Products.php';
-    $prod= new Products($db="marketzone");
-    $prod->edit($_POST);
-    $prod->getData();
+use TECWEB\MYAPI\Products as Products;
+require_once __DIR__ . '/myapi/Products.php';
+
+    $prodObj = new TECWEB\MYAPI\Products('marketzone');
+    $Producto = (object)$_POST;
+    $prodObj->edit($Producto);
+    echo $prodObj->getData(); 
 ?>

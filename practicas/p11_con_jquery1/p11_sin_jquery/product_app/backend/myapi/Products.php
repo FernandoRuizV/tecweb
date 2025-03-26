@@ -24,7 +24,7 @@ Class Products extends DataBase{
                 die('QUERY FAILED');
             } else {
                 if ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    $data = array(
+                    $this->data = array(
                         'status' => 'success',
                         'message' => 'Producto encontrado',
                         'data' => array(
@@ -55,36 +55,45 @@ Class Products extends DataBase{
             'status'  => 'error',
             'message' => 'No añadido',
         );
-        $sql ="SELECT * FROM productos WHERE nombre = '{$objeto->nombre}' AND eliminado = 0";
+        $nombre   = mysqli_real_escape_string($this->conexion, $objeto->nombre);
+        $marca    = mysqli_real_escape_string($this->conexion, $objeto->marca);
+        $modelo   = mysqli_real_escape_string($this->conexion, $objeto->modelo);
+        $detalles = mysqli_real_escape_string($this->conexion, $objeto->detalles);
+        $precio   = floatval($objeto->precio);
+        $unidades = intval($objeto->unidades);
+        $imagen   = mysqli_real_escape_string($this->conexion, $objeto->imagen);
+
+        $sql ="SELECT * FROM productos WHERE nombre = '{$nombre}' AND eliminado = 0";
         $result = $this->conexion->query($sql);
         $rows = $result->fetch_all(MYSQLI_ASSOC);   
-        if(is_null($rows)) {
-            $this->conexion->set_charset("utf8");
-            $sql = "INSERT INTO productos VALUES (null, '{$objeto->nombre}', '{$objeto->marca}', '{$objeto->modelo}', {$objeto->precio}, '{$objeto->detalles}', {$objeto->unidades}, '{$objeto->imagen}', 0)";
+        if(empty($rows)) {
+            $sql = "INSERT INTO productos (id, nombre, marca, modelo, precio, detalles, unidades, imagen, eliminado) 
+                    VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}', 0)";
             if($this->conexion->query($sql)){
-                $data['status'] =  "success";
-                $data['message'] =  "Producto agregado";
+                $this->data['status'] =  "success";
+                $this->data['message'] =  "Producto agregado";
             } else {
-                $data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($this->conexion);
+                $this->data['message'] = "ERROR: No se ejecuto la consulta. " . mysqli_error($this->conexion);
             }
+        } else {
+            $this->data['message'] = "El producto ya existe.";
         }
-        $this->conexion->close();
     }
     public function delete($string){
         $this->data = array(
             'status'  => 'error',
             'message' => 'No eliminado',
         );
-        $sql ="SELECT * FROM productos WHERE nombre = '{$string}' AND eliminado = 0";
+        $sql ="SELECT * FROM productos WHERE id = '{$string}' AND eliminado = 0";
         $result = $this->conexion->query($sql);
         $rows = $result->fetch_all(MYSQLI_ASSOC);
-        if(!is_null($rows)) {
-            $sql = "UPDATE productos SET eliminado=1 WHERE nombre = {$string}";
+        if(!empty($rows)) {
+            $sql = "UPDATE productos SET eliminado=1 WHERE id = {$string}";
             if ( $this->conexion->query($sql) ) {
-                $data['status'] =  "success";
-                $data['message'] =  "Producto eliminado";
+                $this->data['status'] =  "success";
+                $this->data['message'] =  "Producto eliminado";
             } else {
-                $data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($conexion);
+                $this->data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($this->conexion);
             }
         }
         $this->conexion->close();
@@ -98,7 +107,7 @@ Class Products extends DataBase{
         $sql ="SELECT * FROM productos WHERE id = '{$objeto->id}' AND eliminado = 0";
         $result = $this->conexion->query($sql);
         $rows = $result->fetch_all(MYSQLI_ASSOC);   
-        if(!is_null($rows)) {
+        if(!empty($rows)) {
             $this->conexion->set_charset("utf8");
             $sql = "UPDATE productos 
             SET nombre = '{$objeto->nombre}', 
@@ -111,10 +120,10 @@ Class Products extends DataBase{
             WHERE id = '{$objeto->id}'";
 
             if($this->conexion->query($sql)){
-                $data['status'] =  "success";
-                $data['message'] =  "Producto editado";
+                $this->data['status'] =  "success";
+                $this->data['message'] =  "Producto editado";
             } else {
-                $data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($this->conexion);
+                $this->data['message'] = "ERROR: No se ejecuto $sql. " . mysqli_error($this->conexion);
             }
         }
         $this->conexion->close(); 
@@ -126,7 +135,7 @@ Class Products extends DataBase{
             if(!is_null($rows)) {
                 foreach($rows as $num => $row) {
                     foreach($row as $key => $value) {
-                        $data[$num][$key] = utf8_encode($value);
+                        $this->data[$num][$key] = utf8_encode($value);
                     }
                 }
             }
@@ -150,7 +159,7 @@ Class Products extends DataBase{
                 die('QUERY FAILED');
             } else {
                 if ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    $data = array(
+                    $this->data = array(
                         'status' => 'success',
                         'message' => 'Producto encontrado',
                         'data' => array(
@@ -171,6 +180,7 @@ Class Products extends DataBase{
             // Cerrar la conexión
             $this->conexion->close();
         }
+        
     }
     public function search($search){
         $this->data = array();
@@ -183,7 +193,7 @@ Class Products extends DataBase{
 
                     foreach($rows as $num => $row) {
                         foreach($row as $key => $value) {
-                            $data[$num][$key] = utf8_encode($value);
+                            $this->data[$num][$key] = utf8_encode($value);
                         }
                     }
        
@@ -200,17 +210,13 @@ Class Products extends DataBase{
             $sql = "SELECT * FROM productos WHERE nombre LIKE '%{$name}%'";
             if ( $result = $this->conexion->query($sql) ) {
                 $rows = $result->fetch_all(MYSQLI_ASSOC);
-                if(!is_null($rows)) {
+                if(!empty($rows)) 
+                    $data= array();
                     foreach($rows as $num => $row) {
                         foreach($row as $key => $value) {
-                            $data[$num][$key] = utf8_encode($value);
+                            $this->data[$num][$key] = utf8_encode($value);
                         }
                     }
-                    $this->data = array(
-                        'error' => false,
-                        'message' => 'Producto encontrado',
-                        'data' => $data
-                    );
                 }else{
                     $this->data = array(
                         'error' => true,
@@ -219,9 +225,15 @@ Class Products extends DataBase{
                     );
                 }
                 $result->free();
-            } 
+            }else{
+                $this->data = array(
+                    'error'   => true,
+                    'message' => 'Error en la consulta: ' . mysqli_error($this->conexion),
+                    'data'    => []
+                );
+            }
             $this->conexion->close();
         }
-    }
 }
+
 ?>

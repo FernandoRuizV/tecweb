@@ -35,12 +35,8 @@
     require_once __DIR__ . '/myapi/Products.php';
     
     $prodObj = new TECWEB\MYAPI\Products('marketzone');
-    if (isset($_POST['postData'])) {
-        // Convertir los datos POST a un objeto PHP
-        $Producto = (object)$_POST['postData'];
-        $prodObj->add($Producto);
-        echo $prodObj->getData();  // Devolver la respuesta
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Datos no válidos']);
-    }
+    $Producto = (object)$_POST;
+    $prodObj->add($Producto);
+    echo $prodObj->getData(); 
+
 ?>
