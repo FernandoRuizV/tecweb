@@ -291,18 +291,16 @@ $(document).ready(function(){
 
                 try {
                     let prod = JSON.parse(response);
-
-                    if (prod.length > 0) {
-
-                        let product = prod.data[0];
-                        $('#name').val(product.nombre);
-                        $('#productId').val(product.id);
-                        $('#precio').val(product.precio);
-                        $('#unidades').val(product.unidades);
-                        $('#modelo').val(product.modelo);
-                        $('#marca').val(product.marca);
-                        $('#detalles').val(product.detalles);
-                        $('#imagen').val(product.imagen);
+                    console.log(prod);
+                    if (prod) {
+                        $('#name').val(prod.nombre);
+                        $('#productId').val(prod.id);
+                        $('#precio').val(prod.precio);
+                        $('#unidades').val(prod.unidades);
+                        $('#modelo').val(prod.modelo);
+                        $('#marca').val(prod.marca);
+                        $('#detalles').val(prod.detalles);
+                        $('#imagen').val(prod.imagen);
                     } else {
                         alert("Producto no encontrado o respuesta incorrecta.");
                     }

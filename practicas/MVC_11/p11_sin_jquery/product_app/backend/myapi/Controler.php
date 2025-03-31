@@ -13,7 +13,7 @@ Class Controler{
         $Producto = (object)$obj;
         return $Producto;
     }
-    public function extraer($array){
+    public function extra($array){
         $arr = array(
             'nombre' => $array['nombre'],
             'marca' => $array['marca'],
@@ -24,7 +24,8 @@ Class Controler{
             'imagen' => $array['imagen'],
             'id' => $array['id'],
         );
-        return json_encode($arr);
+        $jsonData = json_encode($arr, JSON_PRETTY_PRINT);
+        return $jsonData;
     }
 }
 

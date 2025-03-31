@@ -61,11 +61,13 @@ Class Modelo extends DataBase{
         $rows = $result->fetch_all(MYSQLI_ASSOC);
         if(!empty($rows)) {
             $sql = "UPDATE productos SET eliminado=1 WHERE id = {$string}";
-            /*if ( $this->conexion->query($sql) ) {
-                
+            if ( $this->conexion->query($sql) ) {
+                $msj->eli_exi();
+                echo $msj->getData();
             } else {
-                
-            }*/
+                $msj->eli_fal();
+                echo $msj->getData();
+            }
         }
         $this->conexion->close();
         
@@ -112,10 +114,7 @@ Class Modelo extends DataBase{
                 echo $msj->getData();
             } else {
                 if ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    $asig->extraer($row);
-                    $msj->ext_exi();
-                    echo $msj->getData();  
-                
+                    echo $asig->extra($row); 
                 }
             }
             $this->conexion->close();
@@ -123,7 +122,21 @@ Class Modelo extends DataBase{
         
     }
     public function list(){
-        
+        $msj = new View();
+        if ( $result = $this->conexion->query("SELECT * FROM productos WHERE eliminado = 0") ) {
+            $rows = $result->fetch_all(MYSQLI_ASSOC);
+            if(!is_null($rows)) {
+                foreach($rows as $num => $row) {
+                    foreach($row as $key => $value) {
+                        $msj->list($num,$key,$value);
+                    }
+                }
+            }
+            $result->free();
+        } else {
+            die('Query Error: '.mysqli_error($this->conexion));
+        }
+        $this->conexion->close();
     }
     
     public function search($search){

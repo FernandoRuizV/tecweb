@@ -38,13 +38,20 @@ Class View{
         $this->data['status'] =  "error";
         $this->data['message'] =  "Producto no editado";
     }
-    public function ext_exi(){
-        $this->data['status'] =  "success";
-        $this->data['message'] =  "Producto extraido correctamente";
-    }
     public function ext_fal(){
         $this->data['status'] =  "error";
         $this->data['message'] =  "Producto no extraido";
+    }
+    public function eli_exi(){
+        $this->data['status'] =  "success";
+        $this->data['message'] =  "Producto eliminado correctamente";
+    }
+    public function eli_fal(){
+        $this->data['status'] =  "error";
+        $this->data['message'] =  "Producto no eliminado";
+    }
+    public function list($num,$key,$value){
+        $this->data[$num][$key] = utf8_encode($value);
     }
 }
 

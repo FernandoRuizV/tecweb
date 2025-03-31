@@ -25,10 +25,9 @@
     
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
     echo json_encode($data, JSON_PRETTY_PRINT);*/
-    use TECWEB\MYAPI\Products as Products;
-    require_once __DIR__ . '/myapi/Products.php';
+    use TECWEB\MYAPI\Modelo as Modelo;
+    require_once __DIR__ . '/myapi/Modelo.php';
     
-    $prodObj=new Products('marketzone');
+    $prodObj = new TECWEB\MYAPI\Modelo('marketzone');
     $prodObj->list();
-    echo $prodObj->getData();
 ?>
