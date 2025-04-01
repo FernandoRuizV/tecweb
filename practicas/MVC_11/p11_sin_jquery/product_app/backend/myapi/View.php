@@ -12,6 +12,7 @@ Class View{
         $this->data = array(
             'status' => 'error',
             'message' => 'Hubo un error al procesar',
+            'data'=> [],
         );
     }
     public function getData(){
@@ -38,6 +39,10 @@ Class View{
         $this->data['status'] =  "error";
         $this->data['message'] =  "Producto no editado";
     }
+    public function edi_ine(){
+        $this->data['status'] =  "error";
+        $this->data['message'] =  "Producto no existente";
+    }
     public function ext_fal(){
         $this->data['status'] =  "error";
         $this->data['message'] =  "Producto no extraido";
@@ -53,6 +58,13 @@ Class View{
     public function list($num,$key,$value){
         $this->data[$num][$key] = utf8_encode($value);
     }
+    public function set_data($arr){
+        $this->data['data']=$arr;
+    }
+    public function get_data(){
+        return json_encode($this->data['data'], JSON_UNESCAPED_UNICODE);
+    }
+    
 }
 
 ?>

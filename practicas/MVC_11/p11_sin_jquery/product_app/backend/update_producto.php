@@ -46,12 +46,13 @@
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
     echo json_encode($json, JSON_PRETTY_PRINT);*/
     use TECWEB\MYAPI\Modelo as Modelo;
+    use TECWEB\MYAPI\Controler as Controler;
     require_once __DIR__ . '/myapi/Modelo.php';
 
 
     $prodObj = new TECWEB\MYAPI\Modelo('marketzone');
     $id = ($_POST['id']);
-    
-    $prodObj->extraer($id); 
+    $prod = new TECWEB\MYAPI\Controler();
+    $prod->extraer($id,$prodObj); 
 
 ?>

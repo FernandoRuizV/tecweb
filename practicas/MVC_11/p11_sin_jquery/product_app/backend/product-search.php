@@ -30,12 +30,13 @@
     
     // SE HACE LA CONVERSIÓN DE ARRAY A JSON
     echo json_encode($data, JSON_PRETTY_PRINT);*/
-    use TECWEB\MYAPI\Products as Products;
-    require_once __DIR__ . '/myapi/Products.php';
+    use TECWEB\MYAPI\Modelo as Modelo;
+    use TECWEB\MYAPI\Controler as Controler;
+    require_once __DIR__ . '/myapi/Modelo.php';
     
-    $prodObj = new TECWEB\MYAPI\Products('marketzone');
+    $prodObj = new TECWEB\MYAPI\Modelo('marketzone');
+    $prod = new TECWEB\MYAPI\Controler();
 
     $search = ($_POST['search']);
-    $prodObj->search($search);
-    echo $prodObj->getData(); 
+    $prod->search($search,$prodObj);
 ?>

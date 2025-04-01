@@ -10,141 +10,86 @@ require_once __DIR__ . '/Controler.php';
 //Coordinaciones ->Final
 
 Class Modelo extends DataBase{
-    private $prod=NULL;
+    private $id=NULL;
+    private $nom=NULL;
+    private $mar=NULL;
+    private $mod=NULL;
+    private $pre=NULL;
+    private $det=NULL;
+    private $uni=NULL;
+    private $ima=NULL;
+    private $eli=NULL;
 
-    public function __construct( $db, $user='root', $pass='Angueles.3') {
-        $this->prod = array();
+    public function __construct( $db,$obj=null,$user='root', $pass='Angueles.3') {
+        if($obj!=null){
+            $obj = (object)$obj;
+            $this->id = isset($obj->id) ? $obj->id : null;
+            $this->nom= $obj->nombre;
+            $this->mar= $obj->marca;
+            $this->mod= $obj->modelo;
+            $this->pre= $obj->precio;
+            $this->det= $obj->detalles;
+            $this->uni= $obj->unidades;
+            $this->ima= $obj->imagen;   
+        }
+        
         parent:: __construct($user, $pass, $db);
     }
-    
-    public function add($objeto){
-        if($objeto){
-            $asig = new Controler();
-            $msj = new View();
-
-
-            $objeto= $asig->asignar($objeto);
-    
-            $nombre   = mysqli_real_escape_string($this->conexion, $objeto->nombre);
-            $marca    = mysqli_real_escape_string($this->conexion, $objeto->marca);
-            $modelo   = mysqli_real_escape_string($this->conexion, $objeto->modelo);
-            $detalles = mysqli_real_escape_string($this->conexion, $objeto->detalles);
-            $precio   = floatval($objeto->precio);
-            $unidades = intval($objeto->unidades);
-            $imagen   = mysqli_real_escape_string($this->conexion, $objeto->imagen);
-
-            $sql ="SELECT * FROM productos WHERE nombre = '{$nombre}' AND eliminado = 0";
-            $result = $this->conexion->query($sql);
-            $rows = $result->fetch_all(MYSQLI_ASSOC);
-            if(empty($rows)) {
-                $sql = "INSERT INTO productos (id, nombre, marca, modelo, precio, detalles, unidades, imagen, eliminado) 
-                    VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}', 0)";
-                if($this->conexion->query($sql)){
-                    $msj->ins_exi();
-                    echo $msj->getData();
-                } else {
-                    $msj->ins_fal();
-                    echo $msj->getData();
-                }
-            } else {
-                $msj->ins_ine();
-                echo $msj->getData();
-            }
-        }
-        
+    public function get_con(){
+        return $this->conexion;
     }
-    public function delete($string){
-        $msj = new View();
-        
-        $sql ="SELECT * FROM productos WHERE id = '{$string}' AND eliminado = 0";
-        $result = $this->conexion->query($sql);
-        $rows = $result->fetch_all(MYSQLI_ASSOC);
-        if(!empty($rows)) {
-            $sql = "UPDATE productos SET eliminado=1 WHERE id = {$string}";
-            if ( $this->conexion->query($sql) ) {
-                $msj->eli_exi();
-                echo $msj->getData();
-            } else {
-                $msj->eli_fal();
-                echo $msj->getData();
-            }
-        }
-        $this->conexion->close();
-        
+    public function set_nom($nomb){
+        $this->nom=$nomb;
     }
-    public function edit($objeto){
-        $msj = new View();
-        $asig = new Controler();
-        $objeto= $asig->asignar($objeto);
-
-        $sql ="SELECT * FROM productos WHERE id = '{$objeto->id}' AND eliminado = 0";
-        $result = $this->conexion->query($sql);
-        $rows = $result->fetch_all(MYSQLI_ASSOC);   
-        if(!empty($rows)) {
-            $this->conexion->set_charset("utf8");
-            $sql = "UPDATE productos 
-            SET nombre = '{$objeto->nombre}', 
-                marca = '{$objeto->marca}', 
-                modelo = '{$objeto->modelo}',
-                precio = '{$objeto->precio}', 
-                detalles = '{$objeto->detalles}', 
-                unidades = '{$objeto->unidades}', 
-                imagen = '{$objeto->imagen}'
-            WHERE id = '{$objeto->id}'";
-
-            if($this->conexion->query($sql)){
-                $msj->edi_exi();
-                echo $msj->getData();
-            } else {
-                $msj->edi_fal();
-                echo $msj->getData();
-            }
-        }
-        $this->conexion->close(); 
+    public function set_mar($marc){
+        $this->mar=$marc;
     }
-    public function extraer($id){
-        $msj = new View();
-        $asig = new Controler();
-        if($id) {
-            $sql = "SELECT * FROM productos WHERE id = '{$id}'";
-            $result = mysqli_query($this->conexion, $sql);
-    
-            if (!$result) {
-                $msj->ext_fal();
-                echo $msj->getData();
-            } else {
-                if ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                    echo $asig->extra($row); 
-                }
-            }
-            $this->conexion->close();
-        }
-        
+    public function set_mod($mode){
+        $this->mod=$mode;
     }
-    public function list(){
-        $msj = new View();
-        if ( $result = $this->conexion->query("SELECT * FROM productos WHERE eliminado = 0") ) {
-            $rows = $result->fetch_all(MYSQLI_ASSOC);
-            if(!is_null($rows)) {
-                foreach($rows as $num => $row) {
-                    foreach($row as $key => $value) {
-                        $msj->list($num,$key,$value);
-                    }
-                }
-            }
-            $result->free();
-        } else {
-            die('Query Error: '.mysqli_error($this->conexion));
-        }
-        $this->conexion->close();
+    public function set_pre($prec){
+        $this->pre=$prec;
     }
-    
-    public function search($search){
-        
+    public function set_det($deta){
+        $this->det=$deta;
     }
-    public function busq($name){
-        
-        }
+    public function set_uni($unid){
+        $this->uni=$unid;
+    }
+    public function set_ima($imag){
+        $this->ima=$imag;
+    }
+    public function set_eli($elim){
+        $this->eli=$elim;
+    }
+    public function get_id(){
+        return $this->id;
+    }
+    public function get_nom(){
+        return $this->nom;
+    }
+    public function get_mar(){
+        return $this->mar;
+    }
+    public function get_mod(){
+        return $this->mod;
+    }
+    public function get_pre(){
+        return $this->pre;
+    }
+    public function get_det(){
+        return $this->det;
+    }
+    public function get_uni(){
+        return $this->uni;
+    }
+    public function get_ima(){
+        return $this->ima;
+    }
+    public function get_eli(){
+        return $this->eli;
+    }
+   
 }
 
 ?>
