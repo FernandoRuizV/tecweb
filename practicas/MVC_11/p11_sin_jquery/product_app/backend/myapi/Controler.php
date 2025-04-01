@@ -49,6 +49,7 @@ Class Controler{
         $sql ="SELECT * FROM productos WHERE id = '{$string}' AND eliminado = 0";
         $result = $conexion->query($sql);
         $rows = $result->fetch_all(MYSQLI_ASSOC);
+        
         if(!empty($rows)) {
             $sql = "UPDATE productos SET eliminado=1 WHERE id = {$string}";
             if ( $conexion->query($sql) ) {
@@ -117,6 +118,7 @@ Class Controler{
         $msj = new View();
         $dat= [];
         $conexion= $obj->get_con();
+
         if ($result = $conexion->query("SELECT * FROM productos WHERE eliminado = 0")) {
             $dat = $result->fetch_all(MYSQLI_ASSOC);
             $result->free();
@@ -142,6 +144,56 @@ Class Controler{
         $jsonData = json_encode($arr, JSON_PRETTY_PRINT);
         return $jsonData;
     }
+    public function search($search, $obj){
+        $msj = new View();
+        $dat= [];
+        $conexion= $obj->get_con();
+        if ($result = $conexion->query("SELECT * FROM productos WHERE (id = '{$search}' OR nombre LIKE '$search%' OR marca LIKE '$search%' OR detalles LIKE '$search%') AND eliminado = 0")) {
+            $dat = $result->fetch_all(MYSQLI_ASSOC);
+            $result->free();
+        } else {
+            die('Query Error: ' . $conexion->error);
+        }
+        
+        $conexion->close();
+        $msj->set_data($dat);
+        echo $msj->get_data();  
+    }
+    public function busq($name, $obj) {
+        $msj = new View();
+        $dat = [];
+        $conexion = $obj->get_con();
+    
+        if ($name) {
+            $sql = "SELECT * FROM productos WHERE nombre LIKE ?";
+            $stmt = $conexion->prepare($sql);
+    
+            if (!$stmt) {
+                $msj->sear_err();
+                echo $msj->get_data();
+                return;
+            }
+    
+            $searchParam = "%{$name}%";
+            $stmt->bind_param("s", $searchParam);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $rows = $result->fetch_all(MYSQLI_ASSOC);
+    
+            if (!empty($rows)) {
+                $dat = $rows;
+            } else {
+                $msj->edi_ine();
+            }
+    
+            $stmt->close();
+        }
+    
+        $conexion->close();
+        $msj->set_data($dat);
+        echo $msj->get_data();
+    }
+    
 }
 
 ?>

@@ -55,6 +55,10 @@ Class View{
         $this->data['status'] =  "error";
         $this->data['message'] =  "Producto no eliminado";
     }
+    public function sear_err(){
+        $this->data['status'] =  "error";
+        $this->data['message'] =  "Producto no encontrado";
+    }
     public function list($num,$key,$value){
         $this->data[$num][$key] = utf8_encode($value);
     }
