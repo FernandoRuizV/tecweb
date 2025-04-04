@@ -1,24 +1,3 @@
-// JSON BASE A MOSTRAR EN FORMULARIO
-var baseJSON = {
-    "precio": 0.0,
-    "unidades": 1,
-    "modelo": "XX-000",
-    "marca": "NA",
-    "detalles": "NA",
-    "imagen": "img/default.png"
-  };
-
-function init() {
-    /**
-     * Convierte el JSON a string para poder mostrarlo
-     * ver: https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/JSON
-     */
-
-    // SE LISTAN TODOS LOS PRODUCTOS
-    //*listarProductos();*/
-}
-
-
 
 $(document).ready(function(){
     listar();
@@ -28,7 +7,7 @@ $(document).ready(function(){
             let search= $('#search').val();
             if(search){
                 $.ajax({
-                    url:'http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/product-search.php',
+                    url:'http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/product-search.php',
                     type: 'POST',
                     data:{search},
                     success: function (response){
@@ -159,8 +138,7 @@ $(document).ready(function(){
             errores = true;
         }
         
-        if (detalles === "NA") {
-            $("#product-result").append(`<p>Los detalles no pueden ser nulos.</p>`);
+        if (!detalles) {
             errores = true;
         } else if (detalles.length > 250) {
             $("#product-result").append(`<p>Los detalles no pueden exceder los 250 caracteres.</p>`);
@@ -172,7 +150,7 @@ $(document).ready(function(){
             errores = true;
         }
         if (!imagen) {
-            imagen = "/tecweb/practicas/p08-base/img/imagen.png"; 
+            errores=true; 
         }
         
         if (errores) return;
@@ -182,7 +160,7 @@ $(document).ready(function(){
             let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
             
         console.log("Datos enviados:", postData);
-                const url = edit === false ? 'http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/producto_edit.php';
+                const url = edit === false ? 'http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/producto_edit.php';
                 if (edit) {
                     postData.id = id;
                 }
@@ -201,6 +179,7 @@ $(document).ready(function(){
                             $("#detalles").val('');
                             $("#imagen").val('');
                             edit = false;
+                            alert(res.message);
                             listar();
                         } else {
                             $("#container").html(response).show();
@@ -222,7 +201,7 @@ $(document).ready(function(){
     
     function listar(){
         $.ajax({
-            url:'http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/product-list.php',
+            url:'http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/product-list.php',
             type: 'GET',
             success: function (response){
                 let productos=JSON.parse(response);
@@ -260,7 +239,7 @@ $(document).ready(function(){
             let fila = $(this).closest('tr');
             let id= fila.find('td').first().text();
         
-            $.post('http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/product-delete.php',{id: id},function(response) {
+            $.post('http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/product-delete.php',{id: id},function(response) {
                 console.log(id);
                 console.log(response);
                 try {
@@ -286,7 +265,7 @@ $(document).ready(function(){
             let fila = $(this).closest('tr');
             let id = fila.find('td').first().text();
             edit=true;
-            $.post('http://localhost/tecweb/practicas/MVC_11/p11_sin_jquery/product_app/backend/update_producto.php', {id: id}, function(response) {
+            $.post('http://localhost/tecweb/practicas/MVC_11/p11_con_jquery/product_app/backend/update_producto.php', {id: id}, function(response) {
                 console.log("Respuesta del servidor:", response);
 
                 try {
