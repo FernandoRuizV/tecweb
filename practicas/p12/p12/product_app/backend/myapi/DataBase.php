@@ -1,11 +1,11 @@
 <?php
- namespace TECWEB\MYAPI;
+ namespace MYAPI;
  abstract class DataBase {
      
      protected $conexion;
      protected $data;
      
-     public function __construct($user='root', $pass='Angueles.3', $db) {
+     public function __construct($user, $pass, $db) {
         $this->conexion = @mysqli_connect(
             'localhost', 
             $user, 

@@ -1,9 +1,11 @@
 <?php
- namespace TECWEB\MYAPI;
+namespace MYAPI\Update;
+require_once __DIR__ . '/../../vendor/autoload.php';
+use MYAPI\DataBase;
  class Update extends DataBase {
      
     public function __construct($db) {
-        parent:: __construct($db);
+        parent:: __construct('root', 'Angueles.3',$db);
     }
     public function edit($objeto){
         $this->data = array(

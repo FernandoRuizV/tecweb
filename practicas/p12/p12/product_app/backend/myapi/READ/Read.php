@@ -1,9 +1,12 @@
 <?php
- namespace TECWEB\MYAPI;
+namespace MYAPI\Read;
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+use MYAPI\DataBase;
  class Read extends DataBase{
      
     public function __construct($db) {
-        parent:: __construct($db);
+        parent:: __construct('root', 'Angueles.3',$db);
     }
 
     public function list(){

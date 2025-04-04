@@ -1,9 +1,11 @@
 <?php
- namespace TECWEB\MYAPI;
+namespace MYAPI\Delete;
+require_once __DIR__ . '/../../vendor/autoload.php';
+use MYAPI\DataBase;
  class Delete extends DataBase{
      
     public function __construct($db) {
-        parent:: __construct($db);
+        parent:: __construct('root', 'Angueles.3',$db);
     }
 
     public function delete($string){

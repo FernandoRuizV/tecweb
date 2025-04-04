@@ -1,9 +1,9 @@
 <?php
     
-    use TECWEB\MYAPI\Delete as Delete;
-    require_once __DIR__ . '/myapi/Delete.php';
+    require_once __DIR__ . '/vendor/autoload.php';
+    use MYAPI\DELETE\Delete as Delete;
     
-    $prodObj = new TECWEB\MYAPI\Delete('marketzone');
+    $prodObj = new Delete('marketzone');
 
     $id = ($_POST['id']);
     $prodObj->delete($id);
