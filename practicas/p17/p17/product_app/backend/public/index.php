@@ -40,10 +40,9 @@ $app->post('/update', function ($request, $response, $args){
     $response->getBody()->write(json_encode($prodObj->getData()));
     return $response->withHeader('Content-Type', 'application/json');
 });
-$app->post('/eliminar', function ($request, $response, $args){
+$app->delete('/eliminar/{id}', function ($request, $response, $args){
     $prodObj = new Delete('marketzone');
-    $data = $request->getParsedBody();
-    $id = $data['id'];
+    $id = $args['id'];
     $prodObj->delete($id);
     $response->getBody()->write(json_encode($prodObj->getData()));
     return $response->withHeader('Content-Type', 'application/json');

@@ -234,30 +234,38 @@ $(document).ready(function(){
         });
     }
 
-    $(document).on('click', '.eliminar',function(){
-        if(confirm('¿Estás seguro de querer eliminar el elemento?')){
+    $(document).on('click', '.eliminar', function() {
+        if (confirm('¿Estás seguro de querer eliminar el elemento?')) {
             let fila = $(this).closest('tr');
-            let id= fila.find('td').first().text();
-        
-            $.post('http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/eliminar',{id: id},function(response) {
-                console.log(id);
-                console.log(response);
-                try {
-                    let resp = JSON.parse(response);
-                    if (resp.status === "success") {
-                        alert(resp.message);  // Mostrar mensaje de éxito
-                        listar();
-                    } else {
-                        alert(resp.message);  // Mostrar mensaje de error
-                    }   
-                } catch (e) {
-                    console.error("Error al procesar la respuesta JSON:", e);
-                    alert("Hubo un error al procesar la respuesta del servidor.");
+            let id = fila.find('td').first().text();
+            $.ajax({
+                url: `http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/eliminar/${id}`,
+                type: 'DELETE',
+                success: function(response) {
+                    console.log("ID eliminado:", id);
+                    console.log("Respuesta:", response);
+    
+                    try {
+                        let resp = JSON.parse(response);
+                        if (resp.status === "success") {
+                            alert(resp.message);
+                            listar(); 
+                        } else {
+                            alert(resp.message);
+                        }
+                    } catch (e) {
+                        console.error("Error al procesar la respuesta JSON:", e);
+                        alert("Hubo un error al procesar la respuesta del servidor.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                    alert("No se pudo completar la operación.");
                 }
-            })   
+            });
         }
-        
     });
+    
 
     $(document).on('click', '.editar', function() {
         if (confirm('¿Estás seguro de querer editar el elemento?')) {
