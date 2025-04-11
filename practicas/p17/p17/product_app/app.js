@@ -6,7 +6,7 @@ $(document).ready(function(){
             let search= $('#search').val();
             if(search){
                 $.ajax({
-                    url:'http://localhost/tecweb/practicas/p12/p12/product_app/backend/product-search.php',
+                    url:'http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/search',
                     type: 'POST',
                     data:{search},
                     success: function (response){
@@ -59,7 +59,7 @@ $(document).ready(function(){
         if($('#name').val()) {
             let name = $('#name').val();
             $.ajax({
-                url: './backend/product-search-name.php',
+                url: './backend/public/search-name',
                 data: { name: $('#name').val() },
                 type: 'GET',
                 success: function (response) {
@@ -160,7 +160,7 @@ $(document).ready(function(){
             let postData = { nombre, precio, marca, unidades, modelo, detalles, imagen };
             
         console.log("Datos enviados:", postData);
-                const url = edit === false ? 'http://localhost/tecweb/practicas/p12/p12/product_app/backend/product-add.php' : 'http://localhost/tecweb/practicas/p12/p12/product_app/backend/producto_edit.php';
+                const url = edit === false ? 'http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/add' : 'http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/edit';
                 if (edit) {
                     postData.id = id;
                 }
@@ -201,7 +201,7 @@ $(document).ready(function(){
     
     function listar(){
         $.ajax({
-            url:'http://localhost/tecweb/practicas/p12/p12/product_app/backend/product-list.php',
+            url:'http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/list',
             type: 'GET',
             success: function (response){
                 let productos=JSON.parse(response);
@@ -239,7 +239,7 @@ $(document).ready(function(){
             let fila = $(this).closest('tr');
             let id= fila.find('td').first().text();
         
-            $.post('http://localhost/tecweb/practicas/p12/p12/product_app/backend/product-delete.php',{id: id},function(response) {
+            $.post('http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/eliminar',{id: id},function(response) {
                 console.log(id);
                 console.log(response);
                 try {
@@ -265,7 +265,7 @@ $(document).ready(function(){
             let fila = $(this).closest('tr');
             let id = fila.find('td').first().text();
             edit=true;
-            $.post('http://localhost/tecweb/practicas/p12/p12/product_app/backend/update_producto.php', {id: id}, function(response) {
+            $.post('http://localhost/tecweb/practicas/p17/p17/product_app/backend/public/update', {id: id}, function(response) {
                 console.log("Respuesta del servidor:", response);
 
                 try {
