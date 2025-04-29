@@ -7,7 +7,7 @@ $(document).ready(function(){
             if(search){
                 $.ajax({
                     url:'http://localhost/tecweb/practicas/p18/p18/product_app/backend/search',
-                    type: 'POST',
+                    type: 'GET',
                     data:{search},
                     success: function (response){
                         let tasks=JSON.parse(response);
