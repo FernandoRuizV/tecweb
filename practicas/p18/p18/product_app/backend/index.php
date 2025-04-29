@@ -7,14 +7,16 @@ use MYAPI\READ\Read;
 use MYAPI\UPDATE\Update;
 use MYAPI\DELETE\Delete as Delete;
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
+
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
-$app->setBasePath('/tecweb/practicas/p17/p17/product_app/backend/public');
+$app->setBasePath('/tecweb/practicas/p18/p18/product_app/backend');
 
 
-$app->post('/add', function ($request, $response, $args){
+
+$app->post('/product', function ($request, $response, $args){
     $prodObj = new Create('marketzone');
     $data = $request->getParsedBody(); 
     $Producto = (object)$data;
@@ -24,23 +26,24 @@ $app->post('/add', function ($request, $response, $args){
 });
 
 
-$app->post('/edit', function ($request, $response, $args){
+$app->put('/product', function ($request, $response, $args){
     $prodObj = new Update('marketzone');
-    $data = $request->getParsedBody();
+    $input = $request->getBody()->getContents();
+    $data = json_decode($input, true);
     $Producto = (object)$data;
     $prodObj->edit($Producto); 
     $response->getBody()->write(json_encode($prodObj->getData()));
     return $response->withHeader('Content-Type', 'application/json');
 });
-$app->post('/update', function ($request, $response, $args){
-    $prodObj = new Update('marketzone');
-    $data = $request->getParsedBody();
-    $id = $data['id'];
-    $prodObj->asignar($id);
+$app->get('/busq', function ($request, $response, $args){
+    $prodObj = new Read('marketzone');
+    $params = $request->getQueryParams();
+    $id = $params['id'];
+    $prodObj->busq($id);
     $response->getBody()->write(json_encode($prodObj->getData()));
     return $response->withHeader('Content-Type', 'application/json');
 });
-$app->delete('/eliminar/{id}', function ($request, $response, $args){
+$app->delete('/product/{id}', function ($request, $response, $args){
     $prodObj = new Delete('marketzone');
     $id = $args['id'];
     $prodObj->delete($id);
@@ -66,8 +69,7 @@ $app->get('/search-name', function ($request, $response, $args){
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-
-$app->get('/list', function ($request, $response, $args){    
+$app->get('/products', function ($request, $response, $args){    
     $prodObj = new Read('marketzone');
     $prodObj->list();
     $response->getBody()->write(json_encode($prodObj->getData()));
