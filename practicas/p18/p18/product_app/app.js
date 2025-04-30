@@ -6,9 +6,8 @@ $(document).ready(function(){
             let search= $('#search').val();
             if(search){
                 $.ajax({
-                    url:'http://localhost/tecweb/practicas/p18/p18/product_app/backend/search',
+                    url:`http://localhost/tecweb/practicas/p18/p18/product_app/backend/products/${search}`,
                     type: 'GET',
-                    data:{search},
                     success: function (response){
                         let tasks=JSON.parse(response);
                         let template='';

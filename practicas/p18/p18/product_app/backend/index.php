@@ -51,10 +51,9 @@ $app->delete('/product/{id}', function ($request, $response, $args){
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->get('/search', function ($request, $response, $args){    
+$app->get('/products/{search}', function ($request, $response, $args){    
     $prodObj = new Read('marketzone');
-    $data = $request->getQueryParams();
-    $search = $data['search'] ?? '';
+    $search = $args['search'] ?? '';
     $prodObj->search($search);
     $response->getBody()->write(json_encode($prodObj->getData()));
     return $response->withHeader('Content-Type', 'application/json');
